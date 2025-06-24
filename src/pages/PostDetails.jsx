@@ -24,7 +24,7 @@ const PostDetails = () => {
       <div style={{
         background: '#fff',
         borderRadius: '6px',
-        boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+        boxShadow: '0 1px 4px #388e3c',
         padding: '20px',
         marginBottom: '32px'
       }}>
@@ -40,10 +40,11 @@ const PostDetails = () => {
             borderRadius: '4px',
             padding: '12px 16px',
             marginBottom: '12px',
-            border: '1px solid #eee'
+            border: '1px solid #eee',
+            boxShadow: '0 1px 4px #388e3c'
           }}>
             <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>{comment.name}</div>
-            <div style={{ color: '#555' }}>{comment.body}</div>
+            <div style={{ color: '#388e3c' }}>{comment.body}</div>
           </div>
         ))}
       </div>
