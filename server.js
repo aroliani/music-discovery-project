@@ -87,7 +87,7 @@ app.get('/posts/:postId', async (req, res) => {
 });
 
 app.post('/posts', async (req, res) => {
-  const { title, body, artist, genre, duration } = req.body;
+  const { title, body, artist, genre, duration, audioUrl } = req.body;
   if (!title || !body) return res.status(400).json({ error: 'Title and body are required' });
 
   const lastPost = await Post.findOne().sort({ id: -1 });
@@ -95,20 +95,20 @@ app.post('/posts', async (req, res) => {
   const numberId = id;
   const userId = req.user?._id;
 
-  const newPost = new Post({ id, title, body, artist, genre, duration, numberId, userId });
+  const newPost = new Post({ id, title, body, artist, genre, duration, audioUrl, numberId, userId });
   await newPost.save();
   res.status(201).json({ post: newPost });
 });
 
 app.put('/posts/:id', async (req, res) => {
-  const { title, body, artist, genre, duration } = req.body;
+  const { title, body, artist, genre, duration, audioUrl } = req.body;
   if (!title || !body) return res.status(400).json({ error: 'Title and body are required' });
 
   let post = null;
   if (mongoose.Types.ObjectId.isValid(req.params.id)) {
     post = await Post.findByIdAndUpdate(
       req.params.id,
-      { title, body, artist, genre, duration },
+      { title, body, artist, genre, duration, audioUrl },
       { new: true }
     );
   }
