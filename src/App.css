@@ -7,6 +7,14 @@ body {
 }
 
 /* Root styling */
+body {
+  background-color: #a7e48bb9;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Root styling */
 #root {
   max-width: 1400px; 
   margin: 0 auto;
