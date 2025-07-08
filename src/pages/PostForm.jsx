@@ -9,7 +9,8 @@ const PostForm = () => {
     body: "",
     artist: "",
     genre: "",
-    duration: ""
+    duration: "",
+    audioUrl: ""
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -28,7 +29,8 @@ const PostForm = () => {
             body: data.body,
             artist: data.artist || "",
             genre: data.genre || "",
-            duration: data.duration || ""
+            duration: data.duration || "",
+            audioUrl: data.audioUrl || ""
           });
           setLoading(false);
         })
@@ -61,9 +63,7 @@ const PostForm = () => {
 
     fetch(url, {
       method: method,
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form)
     })
       .then(res => {
@@ -89,10 +89,7 @@ const PostForm = () => {
       <form onSubmit={handleSubmit}>
         {["title", "artist", "genre", "duration"].map(field => (
           <div key={field} style={{ marginBottom: 16 }}>
-            <label
-              htmlFor={field}
-              style={{ display: "block", marginBottom: 8, fontWeight: "bold" }}
-            >
+            <label htmlFor={field} style={{ display: "block", marginBottom: 8, fontWeight: "bold" }}>
               {field.charAt(0).toUpperCase() + field.slice(1)}:
             </label>
             <input
@@ -107,17 +104,36 @@ const PostForm = () => {
                 padding: "10px",
                 borderRadius: 6,
                 border: "1px solid #b2dfb4c4",
-                fontSize: 16,
-                outline: "none"
+                fontSize: 16
               }}
             />
           </div>
         ))}
+
+        {/* Audio URL input */}
         <div style={{ marginBottom: 16 }}>
-          <label
-            htmlFor="body"
-            style={{ display: "block", marginBottom: 8, fontWeight: "bold" }}
-          >
+          <label htmlFor="audioUrl" style={{ display: "block", marginBottom: 8, fontWeight: "bold" }}>
+            Audio URL (YouTube / Spotify):
+          </label>
+          <input
+            type="text"
+            id="audioUrl"
+            name="audioUrl"
+            value={form.audioUrl}
+            onChange={(e) => setFormData({ ...formData, audioUrl: e.target.value })}
+            placeholder="Audio URL (Spotify/YouTube)"
+            style={{
+              width: "100%",
+              padding: "10px",
+              borderRadius: 6,
+              border: "1px solid #b2dfb4c4",
+              fontSize: 16
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <label htmlFor="body" style={{ display: "block", marginBottom: 8, fontWeight: "bold" }}>
             Description:
           </label>
           <textarea
@@ -133,7 +149,6 @@ const PostForm = () => {
               borderRadius: 6,
               border: "1px solid #b2dfb4c4",
               fontSize: 16,
-              outline: "none",
               resize: "vertical"
             }}
           ></textarea>
