@@ -4,14 +4,12 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import session from 'express-session';
 import passport from './config/passport.js';
-import authRouter from "./routes/auth.js";
+
 import User from './models/users.model.js';
 import Post from './models/posts.model.js';
 import Comment from './models/comments.model.js';
 
 const app = express();
-
-app.use('/auth', authRouter);
 
 // Middleware
 app.use(cors({
@@ -74,8 +72,37 @@ app.get('/auth/logout', (req, res) => {
 
 // === POSTS ROUTES ===
 app.get('/posts', async (req, res) => {
-  const posts = await Post.find().populate('userId', 'username');
-  res.json(posts);
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const search = req.query.search || '';
+    
+    const skip = (page - 1) * limit;
+    
+    const searchQuery = search 
+      ? { title: { $regex: search, $options: 'i' } }
+      : {};
+    
+    const totalPosts = await Post.countDocuments(searchQuery);
+    const posts = await Post.find(searchQuery)
+      .populate('userId', 'username')
+      .skip(skip)
+      .limit(limit);
+    
+    const totalPages = Math.ceil(totalPosts / limit);
+    
+    res.json({
+      posts,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalPosts,
+        limit
+      }
+    });
+  } catch {
+    res.status(500).json({ error: 'Failed to fetch posts' });
+  }
 });
 
 app.get('/posts/:postId', async (req, res) => {
@@ -91,7 +118,7 @@ app.get('/posts/:postId', async (req, res) => {
 });
 
 app.post('/posts', async (req, res) => {
-  const { title, body, artist, genre, duration, audioUrl } = req.body;
+  const { title, body, artist, genre, duration } = req.body;
   if (!title || !body) return res.status(400).json({ error: 'Title and body are required' });
 
   const lastPost = await Post.findOne().sort({ id: -1 });
@@ -99,20 +126,20 @@ app.post('/posts', async (req, res) => {
   const numberId = id;
   const userId = req.user?._id;
 
-  const newPost = new Post({ id, title, body, artist, genre, duration, audioUrl, numberId, userId });
+  const newPost = new Post({ id, title, body, artist, genre, duration, numberId, userId });
   await newPost.save();
   res.status(201).json({ post: newPost });
 });
 
 app.put('/posts/:id', async (req, res) => {
-  const { title, body, artist, genre, duration, audioUrl } = req.body;
+  const { title, body, artist, genre, duration } = req.body;
   if (!title || !body) return res.status(400).json({ error: 'Title and body are required' });
 
   let post = null;
   if (mongoose.Types.ObjectId.isValid(req.params.id)) {
     post = await Post.findByIdAndUpdate(
       req.params.id,
-      { title, body, artist, genre, duration, audioUrl },
+      { title, body, artist, genre, duration },
       { new: true }
     );
   }
