@@ -27,7 +27,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Connect MongoDB
-mongoose.connect('mongodb://localhost:27017/musicdb')
+mongoose.connect('mongodb+srv://pythonteam:OG36ibZAQh6DoTSQ@cluster0.yjjpbgv.mongodb.net/')
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
