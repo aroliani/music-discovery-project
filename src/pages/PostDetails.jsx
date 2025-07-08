@@ -8,7 +8,8 @@ import {
   CustomerServiceOutlined,
   EditOutlined,
   DeleteOutlined,
-  PlusCircleOutlined
+  PlusCircleOutlined,
+  PlayCircleOutlined
 } from '@ant-design/icons';
 
 const PostDetails = () => {
@@ -43,13 +44,8 @@ const PostDetails = () => {
     }
   };
 
-  const handleCreateNewPost = () => {
-    navigate('/posts/new');
-  };
-
-  const handleEditPost = () => {
-    navigate(`/posts/edit/${postId}`);
-  };
+  const handleCreateNewPost = () => navigate('/posts/new');
+  const handleEditPost = () => navigate(`/posts/edit/${postId}`);
 
   const handleDeleteComment = (commentId) => {
     if (window.confirm("Delete this comment?")) {
@@ -88,6 +84,7 @@ const PostDetails = () => {
 
   return (
     <div className="card post-card" style={{ padding: 24 }}>
+      {/* Top Navigation & Buttons */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <button
           onClick={() => navigate('/posts')}
@@ -120,6 +117,7 @@ const PostDetails = () => {
         </div>
       </div>
 
+      {/* Post Detail Info */}
       <p style={{ color: '#888', marginBottom: 0 }}>Track #{post.numberId || post.id || postId.slice(-6)}</p>
       <h1><CustomerServiceOutlined style={{ marginRight: 8 }} />{post.title}</h1>
       <div style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
@@ -133,8 +131,38 @@ const PostDetails = () => {
           color: "#388e3c"
         }}>{post.genre}</span>
       </div>
+
       <p style={{ marginTop: 16 }}>{post.body}</p>
 
+      {/* Audio Preview with Icon */}
+      {post.audioUrl && (
+        <div style={{ marginTop: 24 }}>
+          <h3>
+            <PlayCircleOutlined style={{ fontSize: 22, color: '#2e7d32', marginRight: 8 }} />
+            Track Preview
+          </h3>
+          <div>
+            <iframe
+              width="100%"
+              height={post.audioUrl.includes("spotify.com") ? "152" : "120"}
+              src={
+                post.audioUrl.includes("youtube.com")
+                  ? post.audioUrl.replace("watch?v=", "embed/")
+                  : post.audioUrl.includes("spotify.com")
+                    ? `https://open.spotify.com/embed/track/${post.audioUrl.split("/track/")[1]?.split("?")[0]}`
+                    : post.audioUrl
+              }
+              title="Audio Player"
+              frameBorder="0"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+              style={{ border: "none" }}
+            ></iframe>
+          </div>
+        </div>
+      )}
+
+      {/* Comments Section */}
       <h3 style={{ marginTop: 32 }}>
         <CommentOutlined /> Reviews & Comments ({comments.length})
       </h3>
@@ -143,7 +171,7 @@ const PostDetails = () => {
         <p style={{ color: "#888", marginTop: 16 }}>No comments yet.</p>
       )}
       {comments.map((comment) => (
-        <><div key={comment._id} style={{
+        <div key={comment._id} style={{
           marginTop: 16,
           background: '#fafafa',
           border: '1px solid #eee',
@@ -158,7 +186,7 @@ const PostDetails = () => {
             </span>
           </p>
           {comment.email && (
-            <small style={{ color: 'gray' }}>@{comment.email}</small>
+            <small style={{ color: 'gray' }}>{comment.email}</small>
           )}
           <p style={{ marginTop: 8 }}>{comment.body}</p>
           <button
@@ -175,48 +203,50 @@ const PostDetails = () => {
           >
             Delete Comment
           </button>
-
-      </div><div style={{ marginTop: 20, padding: 16, border: "1px solid #ccc", borderRadius: 6, background: "#f9f9f9" }}>
-          <h4 style={{ marginBottom: 10 }}>Add a Comment</h4>
-          <form onSubmit={handleSubmitComment}>
-            <input
-              type="text"
-              placeholder="Your Name"
-              value={newComment.name}
-              onChange={e => setNewComment({ ...newComment, name: e.target.value })}
-              required
-              style={{ width: "100%", padding: 10, marginBottom: 8, borderRadius: 6, border: "1px solid #ccc" }} />
-            <input
-              type="email"
-              placeholder="Your Email (optional)"
-              value={newComment.email}
-              onChange={e => setNewComment({ ...newComment, email: e.target.value })}
-              style={{ width: "100%", padding: 10, marginBottom: 8, borderRadius: 6, border: "1px solid #ccc" }} />
-            <textarea
-              placeholder="Your Comment"
-              value={newComment.body}
-              onChange={e => setNewComment({ ...newComment, body: e.target.value })}
-              required
-              rows="4"
-              style={{ width: "100%", padding: 10, borderRadius: 6, border: "1px solid #ccc" }}
-            ></textarea>
-            <button
-              type="submit"
-              style={{
-                marginTop: 12,
-                padding: "10px 20px",
-                background: "#388e3c",
-                color: "white",
-                border: "none",
-                borderRadius: 6,
-                cursor: "pointer"
-              }}
-            >
-              Submit Comment
-            </button>
-          </form>
-        </div></>
+        </div>
       ))}
+
+      {/* Add Comment Form */}
+      <div style={{ marginTop: 32, padding: 16, border: "1px solid #ccc", borderRadius: 6, background: "#f9f9f9" }}>
+        <h4 style={{ marginBottom: 10 }}>Add a Comment</h4>
+        <form onSubmit={handleSubmitComment}>
+          <input
+            type="text"
+            placeholder="Your Name"
+            value={newComment.name}
+            onChange={e => setNewComment({ ...newComment, name: e.target.value })}
+            required
+            style={{ width: "100%", padding: 10, marginBottom: 8, borderRadius: 6, border: "1px solid #ccc" }} />
+          <input
+            type="email"
+            placeholder="Your Email (optional)"
+            value={newComment.email}
+            onChange={e => setNewComment({ ...newComment, email: e.target.value })}
+            style={{ width: "100%", padding: 10, marginBottom: 8, borderRadius: 6, border: "1px solid #ccc" }} />
+          <textarea
+            placeholder="Your Comment"
+            value={newComment.body}
+            onChange={e => setNewComment({ ...newComment, body: e.target.value })}
+            required
+            rows="4"
+            style={{ width: "100%", padding: 10, borderRadius: 6, border: "1px solid #ccc" }}
+          ></textarea>
+          <button
+            type="submit"
+            style={{
+              marginTop: 12,
+              padding: "10px 20px",
+              background: "#388e3c",
+              color: "white",
+              border: "none",
+              borderRadius: 6,
+              cursor: "pointer"
+            }}
+          >
+            Submit Comment
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
