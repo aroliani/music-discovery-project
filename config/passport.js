@@ -7,7 +7,6 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import bcrypt from "bcrypt";
 import User from "../models/users.model.js";
 
-
 const Config = {
   usernameField: "email",
   passwordField: "password",
@@ -41,9 +40,15 @@ passport.use(
 // JWT Strategy
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromExtractors([
-    (req) => req.cookies.token || null
+    (req) => {
+      let token = null;
+      if (req && req.cookies) {
+        token = req.cookies["token"];
+      }
+      return token;
+    },
   ]),
-  secretOrKey: process.env.JWT_SECRET_KEY
+  secretOrKey: process.env.JWT_SECRET_KEY,
 };
 
 passport.use(
@@ -95,17 +100,17 @@ passport.use(
 );
 
 // Serialize & Deserialize (for session-based login)
-passport.serializeUser((user, done) => {
-  done(null, user._id);
-});
+// passport.serializeUser((user, done) => {
+//   done(null, user._id);
+// });
 
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (err) {
-    done(err);
-  }
-});
+// passport.deserializeUser(async (id, done) => {
+//   try {
+//     const user = await User.findById(id);
+//     done(null, user);
+//   } catch (err) {
+//     done(err);
+//   }
+// });
 
 export default passport;
