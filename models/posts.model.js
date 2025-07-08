@@ -7,6 +7,7 @@ const postSchema = new mongoose.Schema({
   artist: String,
   genre: String,
   duration: String,
+  audioUrl: String,
   numberId: Number,
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 });
