@@ -7,7 +7,7 @@ const PostList = () => {
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ title: "", artist: "", genre: "", duration: "", body: "" });
+  const [form, setForm] = useState({ title: "", artist: "", genre: "", duration: "", body: "", audioUrl: "" });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -95,7 +95,7 @@ const PostList = () => {
       {showForm && (
         <form onSubmit={handleSubmit} style={{ background: "#f8f8f8", padding: 20, borderRadius: 8, marginBottom: 24 }}>
           <h3 style={{ marginBottom: 16 }}>Add New Track</h3>
-          {["title", "artist", "genre", "duration"].map((field) => (
+          {["title", "artist", "genre", "duration", "audioUrl"].map((field) => (
             <div key={field} style={{ marginBottom: 12 }}>
               <input
                 type="text"
