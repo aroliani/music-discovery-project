@@ -4,7 +4,6 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import session from 'express-session';
 import passport from './config/passport.js';
-
 import User from './models/users.model.js';
 import Post from './models/posts.model.js';
 import Comment from './models/comments.model.js';

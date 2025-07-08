@@ -5,6 +5,7 @@ const SignUp = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -21,8 +22,10 @@ const SignUp = () => {
         if (data.error) {
           setError(data.error);
         } else {
-          alert("Account created! Please login.");
-          navigate("/login");
+          setSuccess("Account created! Redirecting to login...");
+          setTimeout(() => {
+            navigate("/login");
+          }, 2000);
         }
       })
       .catch(() => setError("Signup failed."));
@@ -61,6 +64,20 @@ const SignUp = () => {
         />
 
         {error && <p className="error">{error}</p>}
+        {success && (
+          <p
+            style={{
+              background: "#e6ffe6",
+              color: "#388e3c",
+              padding: "10px 16px",
+              borderRadius: 6,
+              marginBottom: 16,
+              border: "1px solid #b2dfdb",
+            }}
+          >
+            {success}
+          </p>
+        )}
 
         <button type="submit">Sign Up</button>
         <p className="switch">
