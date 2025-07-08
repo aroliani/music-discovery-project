@@ -20,8 +20,8 @@ export async function isSameUserValidator(req, res, next){
         return res.status(404).json({ error: 'Post not found' });
     }
 
-    if (!post.userId._id.equals(user._id)) {
-        res.status(403).json("You are not authorized to perform this action.");
+    if (!post.userId.equals(user._id)) {
+        return res.status(403).json("You are not authorized to perform this action.");
     }
     next();
 }
