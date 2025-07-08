@@ -7,7 +7,7 @@ const PostList = () => {
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ title: "", artist: "", genre: "", duration: "", body: "" });
+  const [form, setForm] = useState({ title: "", artist: "", genre: "", duration: "", body: "", audioUrl: "" });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
