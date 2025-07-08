@@ -24,14 +24,13 @@ const Login = ({ onLoginSuccess }) => {
         if (data.error) {
           setError(data.error);
         } else {
-          // Fetch user session after login
           fetch("http://localhost:3000/auth/me", {
             credentials: "include",
           })
             .then((res) => res.json())
             .then((userData) => {
               if (userData.user) {
-                onLoginSuccess?.(userData.user); // ← panggil handler dari App.jsx
+                onLoginSuccess?.(userData.user); 
                 navigate("/");
               } else {
                 setError("Login failed to persist session.");
