@@ -41,9 +41,9 @@ passport.use(
 // JWT Strategy
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromExtractors([
-    (req) => req?.cookies?.token || null,
+    (req) => req.cookies.token || null
   ]),
-  secretOrKey: process.env.JWT_SECRET_KEY,
+  secretOrKey: process.env.JWT_SECRET_KEY
 };
 
 passport.use(
@@ -64,13 +64,14 @@ passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "http://localhost:3000/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
         const existingUser = await User.findOne({
-          socialId: profile.id,
+          googleid: profile.id,
+          username: profile.displayName,
           registerType: "google",
         });
 
@@ -81,7 +82,7 @@ passport.use(
         const newUser = await User.create({
           email: profile.email,
           username: profile.displayName,
-          socialId: profile.id,
+          googleid: profile.id,
           registerType: "google",
         });
 

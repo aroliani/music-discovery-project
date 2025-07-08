@@ -4,12 +4,14 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import session from 'express-session';
 import passport from './config/passport.js';
-
+import authRouter from "./routes/auth.js";
 import User from './models/users.model.js';
 import Post from './models/posts.model.js';
 import Comment from './models/comments.model.js';
 
 const app = express();
+
+app.use('/auth', authRouter);
 
 // Middleware
 app.use(cors({

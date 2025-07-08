@@ -30,7 +30,7 @@ const Login = ({ onLoginSuccess }) => {
             .then((res) => res.json())
             .then((userData) => {
               if (userData.user) {
-                onLoginSuccess?.(userData.user); 
+                onLoginSuccess?.(userData.user);
                 navigate("/");
               } else {
                 setError("Login failed to persist session.");
@@ -39,6 +39,10 @@ const Login = ({ onLoginSuccess }) => {
         }
       })
       .catch(() => setError("Login failed."));
+  };
+
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:3000/auth/google";
   };
 
   return (
@@ -67,6 +71,7 @@ const Login = ({ onLoginSuccess }) => {
         {error && <p className="error">{error}</p>}
 
         <button type="submit">Login</button>
+        <button onClick={handleGoogleLogin}>Login with Google</button>
         <p className="switch">
           Don't have an account?{" "}
           <span onClick={() => navigate("/signup")}>Sign up</span>
