@@ -18,6 +18,10 @@ const PostDetails = () => {
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState({ name: "", email: "", body: "" });
+<<<<<<< HEAD
+=======
+  const [notification, setNotification] = useState("");
+>>>>>>> bcba459c6ca9f9c905b29b40e2ca27bbca389683
 
   useEffect(() => {
     fetch(`http://localhost:3000/posts/${postId}`)
@@ -32,6 +36,7 @@ const PostDetails = () => {
   if (!post) return <p>Loading...</p>;
 
   const handleDeletePost = () => {
+<<<<<<< HEAD
     if (window.confirm("Are you sure you want to delete this post?")) {
       fetch(`http://localhost:3000/posts/${postId}`, {
         method: 'DELETE',
@@ -42,6 +47,21 @@ const PostDetails = () => {
         })
         .catch(error => console.error("Error deleting post:", error));
     }
+=======
+    fetch(`http://localhost:3000/posts/${postId}`, {
+      method: 'DELETE',
+    })
+      .then(() => {
+        setNotification("Post deleted successfully!");
+        setTimeout(() => {
+          navigate('/posts');
+        }, 2000);
+      })
+      .catch(error => {
+        setNotification("Error deleting post.");
+        console.error("Error deleting post:", error);
+      });
+>>>>>>> bcba459c6ca9f9c905b29b40e2ca27bbca389683
   };
 
   const handleCreateNewPost = () => navigate('/posts/new');
@@ -84,7 +104,22 @@ const PostDetails = () => {
 
   return (
     <div className="card post-card" style={{ padding: 24 }}>
+<<<<<<< HEAD
       {/* Top Navigation & Buttons */}
+=======
+      {notification && (
+        <div style={{
+          background: "#e6ffe6",
+          color: "#388e3c",
+          padding: "10px 16px",
+          borderRadius: 6,
+          marginBottom: 16,
+          border: "1px solid #b2dfdb"
+        }}>
+          {notification}
+        </div>
+      )}
+>>>>>>> bcba459c6ca9f9c905b29b40e2ca27bbca389683
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <button
           onClick={() => navigate('/posts')}
