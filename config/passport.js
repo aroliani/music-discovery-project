@@ -1,12 +1,12 @@
+import dotenv from "dotenv";
+dotenv.config();
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import bcrypt from "bcrypt";
-import dotenv from "dotenv";
 import User from "../models/users.model.js";
 
-dotenv.config();
 
 const Config = {
   usernameField: "email",
