@@ -9,6 +9,8 @@ import User from './models/users.model.js';
 import Post from './models/posts.model.js';
 import Comment from './models/comments.model.js';
 
+import { isSameUserValidator } from './validators/post.validator.js'
+
 const app = express();
 
 // Middleware
@@ -69,6 +71,18 @@ app.get('/auth/logout', (req, res) => {
     res.json({ message: "Logged out" });
   });
 });
+
+// === GOOGLE AUTH ROUTES ===
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+app.get('/auth/google/callback',
+  passport.authenticate('google', {
+    successRedirect: 'http://localhost:5173/posts', 
+    failureRedirect: 'http://localhost:5173/login'   
+  })
+);
 
 // === POSTS ROUTES ===
 app.get('/posts', async (req, res) => {
@@ -131,7 +145,7 @@ app.post('/posts', async (req, res) => {
   res.status(201).json({ post: newPost });
 });
 
-app.put('/posts/:id', async (req, res) => {
+app.put('/posts/:id', isSameUserValidator, async (req, res) => {
   const { title, body, artist, genre, duration } = req.body;
   if (!title || !body) return res.status(400).json({ error: 'Title and body are required' });
 
@@ -154,7 +168,7 @@ app.put('/posts/:id', async (req, res) => {
   res.json(post);
 });
 
-app.delete('/posts/:id', async (req, res) => {
+app.delete('/posts/:id', isSameUserValidator, async (req, res) => {
   let post = null;
   if (mongoose.Types.ObjectId.isValid(req.params.id)) {
     post = await Post.findByIdAndDelete(req.params.id);
