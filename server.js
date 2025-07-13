@@ -97,15 +97,28 @@ app.get("/auth/logout", (req, res) => {
 // === GOOGLE AUTH ROUTES ===
 app.get(
   "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
+  passport.authenticate("google", { scope: ["profile", "email"], session: false })
 );
 
 app.get(
   "/auth/google/callback",
-  passport.authenticate("google", {
-    successRedirect: "http://localhost:5173/posts",
-    failureRedirect: "http://localhost:5173/login",
-  })
+  passport.authenticate("google", { session: false }), 
+  (req, res) => {
+    let token = null;
+    if (req.user) {
+      const _id = req.user._id;
+      const payload = { _id };
+      token = jwt.sign(
+        payload,
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: "1h" }
+      )
+        res.cookie("token", token);
+        res.redirect(`http://localhost:5173/posts`);
+    } else {
+      res.redirect(`http://localhost:5173/auth/login?error=google-auth-failed`);
+    }
+  }
 );
 
 // === POSTS ROUTES ===
