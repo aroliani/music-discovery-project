@@ -1,4 +1,4 @@
-name: Deploy Express App to EC2
+name: Deploy MusicDiscovery App to EC2
 
 on:
   push:
@@ -48,10 +48,10 @@ jobs:
           script: |
             set -e
             cd ~
-            rm -rf express-test/
+            rm -rf music-discovery-project/
             sudo apt install -y unzip
-            unzip -o app.zip -d express-test
-            cd express-test
+            unzip -o app.zip -d music-discovery-project
+            cd music-discovery-project
             cat <<EOF> .env
             JWT_SECRET_KEY= '${{ secrets.JWT_SECRET_KEY }}'
             GOOGLE_APP_PASSWORD= '${{ secrets.GOOGLE_APP_PASSWORD }}'
@@ -67,4 +67,4 @@ jobs:
             sudo npm ci
             sudo npm i -g pm2
             pm2 delete all || true
-            pm2 start index.js --name express-test  
+            pm2 start index.js --name music-discovery-project
