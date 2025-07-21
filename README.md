@@ -100,7 +100,7 @@ This routing setup ensures a modern, responsive, and user-friendly navigation ex
 
 ## Credit:
 
-Aroo = CRUD
+Aroliani = CRUD
 Amelya = Google Authentication
 Calista = Access Validation
 Fitra = Pagination
